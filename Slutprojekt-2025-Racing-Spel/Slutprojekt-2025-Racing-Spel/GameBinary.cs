@@ -12,11 +12,13 @@ namespace Slutprojekt_2025_Racing_Spel
             camera = new Camera3D
             {
                 Projection = CameraProjection.Perspective,
-                Position = new Vector3(-3, 2.8f, 6),
+                Position = new Vector3(-3, 2.8f, 0),
                 Target = new Vector3(0, 1.75f, 0),
                 FovY = 65,
                 Up = new Vector3(0, 1, 0)
             };
+
+
         }
 
         public void PreUpdate() { }

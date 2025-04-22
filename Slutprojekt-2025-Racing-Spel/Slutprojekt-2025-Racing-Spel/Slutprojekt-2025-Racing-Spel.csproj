@@ -3,24 +3,14 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
-		<RootNamespace>Slutprojekt_2025_Racing_Spel</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<CopyOutputSymbolsToPublishDirectory>true</CopyOutputSymbolsToPublishDirectory>
-		<CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Raylib-cs" Version="7.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="Asset\**\*.*">
+		<Content Include="Assets\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Asset\" />
 	</ItemGroup>
 </Project>
