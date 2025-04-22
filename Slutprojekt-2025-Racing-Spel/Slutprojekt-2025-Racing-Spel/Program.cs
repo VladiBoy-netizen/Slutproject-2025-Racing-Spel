@@ -26,7 +26,7 @@ namespace Slutprojekt_2025_Racing_Spel
             Raylib.InitWindow(1280, 720, "Racing Spel");
             Raylib.SetTargetFPS(0);
             Raylib.SetExitKey(KeyboardKey.Null);
-            Raylib.HideCursor();
+            Raylib.DisableCursor();
 
             if (consoleVisible)
             {
@@ -50,6 +50,7 @@ namespace Slutprojekt_2025_Racing_Spel
                     }
                     catch { }
                 }
+                if (Raylib.IsKeyReleased(KeyboardKey.F11)) Raylib.ToggleFullscreen();
 
                 // Toggle console with ~ key
                 if (Raylib.IsKeyPressed(KeyboardKey.Grave))
@@ -79,7 +80,6 @@ namespace Slutprojekt_2025_Racing_Spel
                 gameBinary.Draw2D();
                 gameBinary.DrawGUI();
 
-                // Draw UI
                 if (isF3)
                 {
                     Raylib.DrawText("FPS : " + Raylib.GetFPS().ToString(), 5, 5, 10, Color.RayWhite);
