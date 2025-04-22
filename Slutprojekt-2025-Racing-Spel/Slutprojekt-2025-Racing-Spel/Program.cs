@@ -26,7 +26,7 @@ namespace Slutprojekt_2025_Racing_Spel
             Raylib.InitWindow(1280, 720, "Racing Spel");
             Raylib.SetTargetFPS(0);
             Raylib.SetExitKey(KeyboardKey.Null);
-            Raylib.DisableCursor();
+            //Raylib.DisableCursor();
 
             if (consoleVisible)
             {
@@ -101,8 +101,8 @@ namespace Slutprojekt_2025_Racing_Spel
                 if (avgFPS.Count > 100) avgFPS.RemoveAt(0);
             }
 
-            gameBinary.Exit();
             Raylib.CloseWindow();
+            gameBinary.Exit();
         }
 
         static void RebindConsoleOutput()
