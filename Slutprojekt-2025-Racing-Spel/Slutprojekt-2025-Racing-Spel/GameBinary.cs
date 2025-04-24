@@ -12,11 +12,14 @@ namespace Slutprojekt_2025_Racing_Spel
 
         public void Start()
         {
-            PlayerBase = Raylib.LoadModel("Assets/castle.obj");
-            PlayerBaseTexture = Raylib.LoadTexture("Assets/castle_diffuse.png");
+            PlayerBase = Raylib.LoadModel("Assets/ACar.obj");   
+            PlayerBaseTexture = Raylib.LoadTexture("Assets/ErrorTexture.png");
             unsafe
             {
                 PlayerBase.Materials[0].Maps[(int)MaterialMapIndex.Albedo].Texture = PlayerBaseTexture;
+                Shader shader = Raylib.LoadShader("simple_shader.vs", "simple_shader.fs");
+                PlayerBase.Materials[0].Shader = shader;
+
             }
 
 
@@ -25,7 +28,7 @@ namespace Slutprojekt_2025_Racing_Spel
                 Projection = CameraProjection.Perspective,
                 Position = new Vector3(-3, 2.8f, 0),
                 Target = new Vector3(0, 1.75f, 0),
-                FovY = 30,
+                FovY = 65,
                 Up = new Vector3(0, 1, 0)
             };
 

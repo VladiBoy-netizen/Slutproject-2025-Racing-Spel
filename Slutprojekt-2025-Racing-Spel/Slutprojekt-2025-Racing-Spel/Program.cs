@@ -13,7 +13,7 @@ namespace Slutprojekt_2025_Racing_Spel
         [DllImport("kernel32.dll")]
         static extern bool FreeConsole();
 
-        static bool consoleVisible = true;
+        static bool consoleVisible = false;
 
         // Debugging
         public static bool isF3 = true;
@@ -26,7 +26,7 @@ namespace Slutprojekt_2025_Racing_Spel
             Raylib.InitWindow(1280, 720, "Racing Spel");
             Raylib.SetTargetFPS(0);
             Raylib.SetExitKey(KeyboardKey.Null);
-            //Raylib.DisableCursor();
+            Raylib.DisableCursor();
 
             if (consoleVisible)
             {
