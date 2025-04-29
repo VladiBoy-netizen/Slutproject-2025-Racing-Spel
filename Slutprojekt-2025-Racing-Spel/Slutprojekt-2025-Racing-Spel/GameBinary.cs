@@ -5,63 +5,20 @@ namespace Slutprojekt_2025_Racing_Spel
 {
     class GameBinary
     {
-        public static Camera3D camera;
+        virtual public void Start() { }
 
-        public static Model PlayerBase;
-        public static Texture2D PlayerBaseTexture;
+        virtual public void PreUpdate() { }
 
-        public void Start()
-        {
-            PlayerBase = Raylib.LoadModel("Assets/ACar.obj");   
-            PlayerBaseTexture = Raylib.LoadTexture("Assets/ErrorTexture.png");
-            unsafe
-            {
-                PlayerBase.Materials[0].Maps[(int)MaterialMapIndex.Albedo].Texture = PlayerBaseTexture;
-                Shader shader = Raylib.LoadShader("simple_shader.vs", "simple_shader.fs");
-                PlayerBase.Materials[0].Shader = shader;
+        virtual public void Update() { }
 
-            }
+        virtual public void LateUpdate() { }
 
+        virtual public void Draw3D() { }
 
-            camera = new Camera3D
-            {
-                Projection = CameraProjection.Perspective,
-                Position = new Vector3(-3, 2.8f, 0),
-                Target = new Vector3(0, 1.75f, 0),
-                FovY = 65,
-                Up = new Vector3(0, 1, 0)
-            };
+        virtual public void Draw2D() { }
 
+        virtual public void DrawGUI() { }
 
-        }
-
-        public void PreUpdate() { }
-
-        public void Update()
-        {
-            Raylib.UpdateCamera(ref camera, CameraMode.Free);
-        }
-
-        public void LateUpdate() { }
-
-        public void Draw3D()
-        {
-            Raylib.BeginMode3D(camera);
-
-            Raylib.DrawModel(PlayerBase, new Vector3(0, 0, 0), 1.0f, Color.White);
-
-            Raylib.DrawGrid(10, 1);
-
-            Raylib.EndMode3D();
-        }
-
-        public void Draw2D() { }
-
-        public void DrawGUI() { }
-
-        public void Exit()
-        {
-            Raylib.UnloadModel(PlayerBase);
-        }
+        virtual public void Exit() { }
     }
 }
