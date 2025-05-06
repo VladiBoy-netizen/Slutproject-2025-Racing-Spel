@@ -18,19 +18,19 @@ namespace Slutprojekt_2025_Racing_Spel
         static Scene sceneHandle = new();
 
         // Debugging
-        public static bool isF3 = true;
+        public static bool isF3 = false;
         public static List<int> avgFPS = [];
 
         [STAThread]
         static void Main()
         {
-            Raylib.SetConfigFlags(ConfigFlags.AlwaysRunWindow);
-            Raylib.InitWindow(1280, 720, "Racing Spel");
+            Raylib.SetConfigFlags(ConfigFlags.AlwaysRunWindow | ConfigFlags.FullscreenMode);
+            Raylib.InitWindow(1280, 720, "Under Run");
             Raylib.SetTargetFPS(0);
             Raylib.SetExitKey(KeyboardKey.Null);
             Raylib.HideCursor();
 
-            sceneHandle.Binary = new GameScene();
+            sceneHandle.Binary = new MainMenu();
 
             if (consoleVisible)
             {
