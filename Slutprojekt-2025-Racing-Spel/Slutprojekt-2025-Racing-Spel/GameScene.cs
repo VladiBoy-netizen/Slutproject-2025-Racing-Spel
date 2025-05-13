@@ -1,6 +1,7 @@
 ﻿using Raylib_cs;
-using System.ComponentModel;
 using System.Numerics;
+using System.IO;
+
 
 namespace Slutprojekt_2025_Racing_Spel
 {
@@ -29,6 +30,15 @@ namespace Slutprojekt_2025_Racing_Spel
         public static Texture2D PlayerGrassTexture;
         public static Texture2D WheelTexture;
         public static Texture2D DiskTexture;
+
+        private float raceStartTime = 0;
+        private float raceEndTime = 0;
+        private float raceDuration = 0;
+        private bool raceStarted = false;
+        private bool raceEnded = false;
+        private float bestTime = 0;
+        private readonly string bestTimeFile = "best_time.txt";
+
 
         public static Model sceneModel;
         
@@ -110,11 +120,20 @@ namespace Slutprojekt_2025_Racing_Spel
                 Up = new Vector3(0, 1, 0)
             };
 
-            player.Init(PlayerBase, new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+            player.Init(PlayerBase, new Vector3(0, 0, 2.5f), new Vector3(0, 0, 0));
             player.FLWheel.Init(WheelBase, new Vector3(1.3f, 0.3f, -0.75f), new Vector3(0, 0, 0), 0.3f, true);
             player.FRWheel.Init(WheelBase, new Vector3(1.3f, 0.3f, 0.75f), new Vector3(0, 180, 0), 0.3f, false);
             player.BLWheel.Init(WheelBase, new Vector3(-1.175f, 0.3f, -0.75f), new Vector3(0, 0, 0), 0.3f, true);
             player.BRWheel.Init(WheelBase, new Vector3(-1.175f, 0.3f, 0.75f), new Vector3(0, 180, 0), 0.3f, false);
+
+            if (File.Exists(bestTimeFile))
+            {
+                string bestTimeStr = File.ReadAllText(bestTimeFile);
+                if (float.TryParse(bestTimeStr, out float loadedBestTime))
+                {
+                    bestTime = loadedBestTime;
+                }
+            }
         }
 
         public override void PreUpdate()
@@ -161,6 +180,52 @@ namespace Slutprojekt_2025_Racing_Spel
 
             float lerpSpeed = 5f * Raylib.GetFrameTime();
             cameraAngle = Single.Lerp(cameraAngle, targetCameraAngle, lerpSpeed);
+
+            if (!raceStarted && player.Position.X >= 2)
+            {
+                raceStarted = true;
+                raceStartTime = (float)Raylib.GetTime();
+                Console.WriteLine("[SCENE] Race started!");
+            }
+
+            if (raceStarted && !raceEnded && player.Position.X >= 404)
+            {
+                raceEndTime = (float)Raylib.GetTime();
+                raceDuration = raceEndTime - raceStartTime;
+                raceEnded = true;
+
+                if (bestTime == 0 || raceDuration < bestTime)
+                {
+                    bestTime = raceDuration;
+                    File.WriteAllText(bestTimeFile, bestTime.ToString("F2"));
+                }
+
+
+                Console.WriteLine($"[SCENE] Race finished in {raceDuration:0.00} seconds");
+            }
+
+            if (Raylib.IsKeyPressed(KeyboardKey.R))
+            {
+                raceStarted = false;
+                raceEnded = false;
+                raceStartTime = 0;
+                raceEndTime = 0;
+                raceDuration = 0;
+
+                player.Position = new Vector3(0, 0, 2.5f);
+                player.Force = Vector3.Zero;
+                player.BLWheel.Force = Vector3.Zero;
+                player.BLWheel.WantedForce = Vector3.Zero;
+                player.BRWheel.Force = Vector3.Zero;
+                player.BRWheel.WantedForce = Vector3.Zero;
+                player.gearShift = 1;
+                player.stress = 0;
+                player.speed = 0;
+
+                Console.WriteLine("[SCENE] Race reset.");
+                File.WriteAllText(bestTimeFile, bestTime.ToString("F2"));
+            }
+
         }
 
         public override void LateUpdate()
@@ -280,6 +345,22 @@ namespace Slutprojekt_2025_Racing_Spel
             else if (player.gearShift == 0) Raylib.DrawText("R", 50, 70, 20, Color.White);
             //Raylib.DrawText(player.Dead.ToString(), 50, 150, 20, Color.White);
             Raylib.DrawText(player.stress.ToString(), 50, 90, 20, Color.White);
+
+            if (raceStarted && !raceEnded)
+            {
+                float currentTime = (float)Raylib.GetTime() - raceStartTime;
+                Raylib.DrawText($"Time: {currentTime:0.00}s", 50, 110, 20, Color.Yellow);
+            }
+            else if (raceEnded)
+            {
+                Raylib.DrawText($"Finish Time: {raceDuration:0.00}s", 50, 110, 20, Color.Green);
+            }
+
+            if (bestTime > 0)
+            {
+                Raylib.DrawText($"Best Time: {bestTime:0.00}s", 50, 130, 20, Color.Orange);
+            }
+
         }
 
         void Scene3D()
@@ -289,24 +370,7 @@ namespace Slutprojekt_2025_Racing_Spel
                 player.Draw();
             }
 
-            float gridWidth = 2.0f;
-            float gridLength = 402.0f;
-            float spacing = 1.0f;
-
-            int numLines = (int)(gridLength / spacing);
-
-            for (int i = 0; i <= numLines; i++)
-            {
-                float x = i * spacing;
-
-                Raylib.DrawLine3D(new Vector3(x, 0, -gridWidth / 2), new Vector3(x, 0, gridWidth / 2), Color.Gray);
-            }
-
             Raylib.DrawModel(sceneModel, new Vector3(0, 0, 0), 1, Color.White);
-
-            Raylib.DrawLine3D(new Vector3(0, 0, -gridWidth / 2), new Vector3(gridLength, 0, -gridWidth / 2), Color.DarkBlue);
-            Raylib.DrawLine3D(new Vector3(0, 0, gridWidth / 2), new Vector3(gridLength, 0, gridWidth / 2), Color.DarkBlue);
-            Raylib.DrawLine3D(new Vector3(0, 0, 0), new Vector3(gridLength, 0, 0), Color.Red);
         }
     }
 }
