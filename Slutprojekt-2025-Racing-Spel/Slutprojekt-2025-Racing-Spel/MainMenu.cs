@@ -1,7 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 
-namespace Slutprojekt_2025_Racing_Spel
+namespace UnderRun
 {
     internal class MainMenu : GameBinary
     {
@@ -181,7 +181,7 @@ namespace Slutprojekt_2025_Racing_Spel
 
                 Rectangle rect = new Rectangle(Raylib.GetScreenWidth() / 3 + 5, 5, Raylib.GetScreenWidth() / 3 * 2 - 10, Raylib.GetScreenHeight() - 10);
 
-                RaylibTextHelper.DrawTextBoxed("[Input]\nArrows: Rotate camera\nWASD: Move car\nLeft Shift: Boost the car on gear 12\n\n[Gameplay]\nNow only drag race avaliable\nBut if you hit engine stress above 10, you DIE.", rect, 20, 2, Color.White);
+                RaylibTextHelper.DrawTextBoxed("[Input]\nArrows: Rotate camera\nWASD: Move car\nLeft Shift: Boost the car on gear 12\nSpace: Handbreak\nV: Change camera view\n\n[Gameplay]\nNow only drag race avaliable\nBut if you hit engine stress above 10, you DIE.", rect, 20, 2, Color.White);
 
                 Raylib.DrawText("[Help]", 175 - 2, (int)(450 - (75 / 2)) - 1, 75, Color.Red);
                 Raylib.DrawText("[Help]", 175 - 1, (int)(450 - (75 / 2)) - 2, 75, Color.Blue);

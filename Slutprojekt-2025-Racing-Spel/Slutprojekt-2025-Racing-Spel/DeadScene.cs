@@ -2,7 +2,7 @@
 using Raylib_cs;
 using System.Numerics;
 
-namespace Slutprojekt_2025_Racing_Spel
+namespace UnderRun
 {
     internal class DeadScene : GameBinary
     {
