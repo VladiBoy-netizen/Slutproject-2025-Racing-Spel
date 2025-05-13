@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using Raylib_cs;
 
 namespace Slutprojekt_2025_Racing_Spel
 {
     class Program
     {
+        public static bool closeWindow = false;
+
         [DllImport("kernel32.dll")]
         static extern bool AllocConsole();
 
@@ -14,19 +18,47 @@ namespace Slutprojekt_2025_Racing_Spel
         static extern bool FreeConsole();
 
         static bool consoleVisible = false;
+        public static Scene sceneHandle = new();
 
-        static Scene sceneHandle = new();
+        // Settings
+        public static List<Vector2> Resolutions = [
+            new(1152, 648), 
+            new(1280, 720), 
+            new(1366, 768), 
+            new(1600, 900), 
+            new(1920, 1080), 
+            new(2560, 1440), 
+            new(3840, 2160), 
+            //new(7680, 4320), 
+        ];
+
+        public static List<ConfigFlags> configFlags = [];
 
         // Debugging
         public static bool isF3 = false;
         public static List<int> avgFPS = [];
 
+        public static void ReloadScreen()
+        {
+            var settings = Saves.LoadSettings("settings.json");
+            configFlags = [];
+
+            ConfigFlags finalFlags = 0;
+            foreach (var flag in settings.WindowFlags)
+            {
+                finalFlags |= flag;
+                configFlags.Add(finalFlags);
+            }
+            Raylib.SetConfigFlags(finalFlags);
+            Vector2 Resoulution = Resolutions[settings.ResolutionID];
+            Raylib.InitWindow((int)Resoulution.X, (int)Resoulution.Y, "Under Run");
+        }
+
         [STAThread]
         static void Main()
         {
-            Raylib.SetConfigFlags(ConfigFlags.AlwaysRunWindow | ConfigFlags.FullscreenMode);
-            Raylib.InitWindow(1280, 720, "Under Run");
-            Raylib.SetTargetFPS(0);
+            ReloadScreen();
+            Raylib.SetTargetFPS(60);
             Raylib.SetExitKey(KeyboardKey.Null);
             Raylib.HideCursor();
 
@@ -40,14 +72,14 @@ namespace Slutprojekt_2025_Racing_Spel
                 Console.Title = "[CONSOLE] Racing Spel";
             }
 
-            //GameBinary gameBinary = new();
-
-            while (!Raylib.WindowShouldClose())
+            while (!closeWindow)
             {
                 sceneHandle.Binary.Start();
 
-                while (!sceneHandle.changeScene && !Raylib.WindowShouldClose())
+                while (!sceneHandle.changeScene && !closeWindow)
                 {
+                    closeWindow = Raylib.WindowShouldClose();
+
                     if (Raylib.IsKeyReleased(KeyboardKey.F3))
                     {
                         isF3 = !isF3;
